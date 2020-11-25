@@ -2,35 +2,92 @@ package proyectoeditorvideo;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.util.Duration;
 
-/**
- *
- * @author nico
- */
+import proyectoeditorvideo.Video;
+
 public class FXMLDocumentController implements Initializable {
+    
+    Video vids;
+    MediaPlayer mediaPlayer;
+    
+    @FXML
+    private MediaView mediaView;
+    
+    @FXML
+    private Slider progressBar;
     
     @FXML
     private void agregarVideo(ActionEvent event){
-        System.out.println("Boton de agregar video");
+        
+        if(mediaPlayer != null){
+            mediaPlayer.stop();
+        }
+        
+        String suri = vids.selectVideo();
+        
+        if(suri != null){
+            Media media = new Media(suri);
+            mediaPlayer = new MediaPlayer(media);
+            mediaView.setMediaPlayer(mediaPlayer);
+            mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>(){
+                @Override
+                public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                    progressBar.setValue(newValue.toSeconds());
+                }
+            });
+            
+            progressBar.setOnMousePressed(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent event) {
+                    mediaPlayer.seek(Duration.seconds(progressBar.getValue()));
+                }
+            });
+            
+            progressBar.setOnMouseDragged(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent event) {
+                    mediaPlayer.seek(Duration.seconds(progressBar.getValue()));
+                }
+            });
+            
+            mediaPlayer.play();
+        }
     }
     
     @FXML
     private void playVideo(ActionEvent event){
-        System.out.println("Boton de play video");
+        if(mediaPlayer != null){
+            mediaPlayer.play();
+        }
     }
     
     @FXML
     private void pausaVideo(ActionEvent event){
-        System.out.println("Boton de pausa video");
+        if(mediaPlayer != null){
+            mediaPlayer.pause();
+        }
     }
     
     @FXML
     private void stopVideo(ActionEvent event){
-        System.out.println("Boton de stop video");
+        if(mediaPlayer != null){
+            mediaPlayer.stop();
+        }
     }
     
     @FXML
@@ -69,18 +126,8 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
-    private void playAudio(ActionEvent event){
-        System.out.println("Boton de play audio");
-    }
-    
-    @FXML
-    private void pausarAudio(ActionEvent event){
-        System.out.println("Boton de pausar audio");
-    }
-    
-    @FXML
-    private void stopAudio(ActionEvent event){
-        System.out.println("Boton de stop audio");
+    private void quitarAudio(ActionEvent event){
+        System.out.println("Boton de quitar audio");
     }
     
     @FXML
@@ -91,6 +138,7 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Primera ejecución es acá
+        vids = new Video();
     }    
     
 }
