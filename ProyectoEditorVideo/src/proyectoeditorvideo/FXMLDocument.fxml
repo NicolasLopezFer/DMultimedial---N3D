@@ -61,7 +61,7 @@
             <Button mnemonicParsing="false" onAction="#stopAudio" prefHeight="62.0" prefWidth="252.0" text="Stop" />
          </children>
       </VBox>
-      <Button layoutX="224.0" layoutY="625.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="462.0" text="Guardar" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" />
+      <Button layoutX="224.0" layoutY="625.0" mnemonicParsing="false" onAction="#guardarTodo" prefHeight="54.0" prefWidth="462.0" text="Guardar" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" />
       <ProgressBar layoutX="50.0" layoutY="328.0" prefHeight="11.0" prefWidth="800.0" progress="0.0" />
    </children>
 </AnchorPane>

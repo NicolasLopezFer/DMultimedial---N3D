@@ -85,7 +85,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void guardarTodo(ActionEvent event){
-        System.out.println("Boton de guardarTodo");
+        System.out.println("Boton de guardar Todo");
     }
     
     @Override
