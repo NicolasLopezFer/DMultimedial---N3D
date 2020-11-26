@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.media.*?>
 <?import java.lang.*?>
@@ -57,12 +58,13 @@
             <Button mnemonicParsing="false" onAction="#quitarAudio" prefHeight="60.0" prefWidth="252.0" text="Quitar Audio" />
          </children>
       </VBox>
+      <Slider fx:id="progressBar" layoutX="211.0" layoutY="339.0" prefHeight="14.0" prefWidth="510.0" />
       <Button layoutX="224.0" layoutY="625.0" mnemonicParsing="false" onAction="#guardarTodo" prefHeight="54.0" prefWidth="462.0" text="Guardar" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" />
-      <VBox alignment="TOP_CENTER" layoutX="150.0" layoutY="24.0" prefHeight="325.0" prefWidth="610.0">
+      <Pane fx:id="panelContenedor" layoutX="216.0" layoutY="14.0" prefHeight="300.0" prefWidth="500.0">
          <children>
-            <MediaView fx:id="mediaView" fitHeight="300.0" fitWidth="600.0" />
-            <Slider fx:id="progressBar" prefHeight="14.0" prefWidth="610.0" />
+            <MediaView fx:id="mediaView" fitHeight="300.0" fitWidth="500.0" />
+            <ImageView fx:id="imagenVideo" fitHeight="150.0" fitWidth="200.0" layoutX="150.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true" />
          </children>
-      </VBox>
+      </Pane>
    </children>
 </AnchorPane>

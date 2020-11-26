@@ -19,7 +19,12 @@ public class Video {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Select a File (*.mp4)", "*.mp4");
         fileChooser.getExtensionFilters().add(filter);
         File file = fileChooser.showOpenDialog(null);
-        filePath = file.toURI().toString();
+        if(file != null){
+            filePath = file.toURI().toString();
+        } else{
+            filePath = null;
+        }
+        
         
         return filePath;
     }
