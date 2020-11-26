@@ -36,7 +36,6 @@ public class MergeVideoAudio {
             @Override
             public void run() {
                 merge.perform(path_video, path_audio, path_output);
-                System.exit(0);
             }
         };
         thread.run();

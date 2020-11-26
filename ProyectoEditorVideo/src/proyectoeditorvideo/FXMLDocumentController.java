@@ -225,27 +225,54 @@ public class FXMLDocumentController implements Initializable {
         
         //mediaPlayer.dispose();
         String nuevo = sUriVideo.substring(6);
-        String nuevoAudio = sUriAudio.substring(6);
         if(sUriAudio == null && sUriImage != null)
         {
-            VideoThumbnailsExample.agregarImagen(nuevo, "result.mp4", "imageAux.png");
+            String nuevaImagen = sUriImage.substring(6);
+            mediaPlayer.dispose();
+            AudioExtractor.convertToMP3(nuevo, "audioPrueba.mp3");
+            VideoThumbnailsExample.agregarImagen(nuevo, "result.mp4",nuevaImagen ,imagenVideo.getLayoutX(),imagenVideo.getLayoutY());
+            VideoThumbnailsExample.agregarMusica("result.mp4", "resultAudio.mp4" ,"audioPrueba.mp3");
+            try {
+        	File inputFile = new File("result.mp4");
+                File tempFile = new File("resultAudio.mp4");
+		Files.move(tempFile.toPath(), inputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                File audioTempFile = new File("audioPrueba.mp3");
+                audioTempFile.delete();
+            } catch (IOException e) {
+			// TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            imagenVideo.setImage(null);
+            sUriVideo= null;
+            sUriImage= null;
         }
         else if(sUriAudio != null && sUriImage == null)
         {
+            String nuevoAudio = sUriAudio.substring(6);
             VideoThumbnailsExample.agregarMusica(nuevo, "result.mp4", nuevoAudio);
+            sUriVideo= null;
+            sUriAudio= null;
         }
         else if(sUriAudio != null && sUriImage != null)
         {
-            VideoThumbnailsExample.agregarImagen(nuevo, "result.mp4", "imageAux.png");
+            String nuevoAudio = sUriAudio.substring(6);
+            String nuevaImagen = sUriImage.substring(6);
+            AudioExtractor.convertToMP3(nuevo, "audioPrueba.mp3");
+            VideoThumbnailsExample.agregarImagen(nuevo, "result.mp4",nuevaImagen ,imagenVideo.getLayoutX(),imagenVideo.getLayoutY());
             VideoThumbnailsExample.agregarMusica("result.mp4", "resultAudio.mp4", nuevoAudio);
             try {
         	File inputFile = new File("result.mp4");
                 File tempFile = new File("resultAudio.mp4");
 		Files.move(tempFile.toPath(), inputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+                File audioTempFile = new File("audioPrueba.mp3");
+                audioTempFile.delete();
+            } catch (IOException e) {
+		e.printStackTrace();
+            }
+            sUriVideo= null;
+            sUriAudio= null;
+            sUriImage= null;
+            imagenVideo.setImage(null);
         }
         System.out.println("ACABE");
     }

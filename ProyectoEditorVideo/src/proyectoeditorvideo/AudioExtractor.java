@@ -11,61 +11,36 @@ import com.xuggle.mediatool.event.ICloseEvent;
 import com.xuggle.mediatool.event.IOpenCoderEvent;
 import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IStreamCoder;
+import it.sauronsoftware.jave.AudioAttributes;
+import it.sauronsoftware.jave.Encoder;
+import it.sauronsoftware.jave.EncoderException;
+import it.sauronsoftware.jave.EncodingAttributes;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AudioExtractor {
-	
-	public static void convert(String from, final String to) {
-        IMediaReader mediaReader = ToolFactory.makeReader(from);
-        final int mySampleRate = 44100;
-        final int myChannels = 2;
 
-        mediaReader.addListener(new MediaToolAdapter() {
+    public static void convertToMP3(String input, String output) { //modify on your convenience
+        File source = new File(input);
+        File target = new File(output);
 
-            private IContainer container;
-            private IMediaWriter mediaWriter;
+        AudioAttributes audioAttributes = new AudioAttributes();
+        audioAttributes.setCodec("libmp3lame");
+        audioAttributes.setBitRate(new Integer(128000));
+        audioAttributes.setChannels(new Integer(2));
+        audioAttributes.setSamplingRate(new Integer(44100));
+        EncodingAttributes encodingAttributes = new EncodingAttributes();
+        encodingAttributes.setFormat("mp3");
+        encodingAttributes.setAudioAttributes(audioAttributes);
 
-            @Override
-            public void onOpenCoder(IOpenCoderEvent event) {
-                container = event.getSource().getContainer();
-                mediaWriter = null;
-            }
-
-            @Override
-            public void onAudioSamples(IAudioSamplesEvent event) {
-            if (container != null) {
-                  if (mediaWriter == null) {
-                    mediaWriter = ToolFactory.makeWriter(to);
-
-                    mediaWriter.addListener(new MediaListenerAdapter() {
-
-                          @Override
-                          public void onAddStream(IAddStreamEvent event) {
-                              IStreamCoder streamCoder = event.getSource().getContainer().getStream(event.getStreamIndex()).getStreamCoder();
-                              streamCoder.setFlag(IStreamCoder.Flags.FLAG_QSCALE, false);
-                              streamCoder.setBitRate(128);
-                              streamCoder.setChannels(myChannels);
-                              streamCoder.setSampleRate(mySampleRate);
-                              streamCoder.setBitRateTolerance(0);
-                          }
-                      });
-
-                    mediaWriter.addAudioStream(0, 0, myChannels, mySampleRate);
-                }
-                    mediaWriter.encodeAudio(0, event.getAudioSamples());
-                    System.out.println(event.getTimeStamp() / 1000);
-                }
-            }
-
-            @Override
-            public void onClose(ICloseEvent event) {
-                if (mediaWriter != null) {
-                    mediaWriter.close();
-                }
-            }
-        });
-
-        while (mediaReader.readPacket() == null) {
+        Encoder encoder = new Encoder();
+        try { 
+            encoder.encode(source, target, encodingAttributes);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(AudioExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EncoderException ex) {
+            Logger.getLogger(AudioExtractor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }
