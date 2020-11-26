@@ -1,5 +1,6 @@
 package proyectoeditorvideo;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
@@ -12,10 +13,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
 import proyectoeditorvideo.Video;
@@ -24,12 +29,19 @@ public class FXMLDocumentController implements Initializable {
     
     Video vids;
     MediaPlayer mediaPlayer;
+    Image imagen;
     
     @FXML
     private MediaView mediaView;
     
     @FXML
     private Slider progressBar;
+    
+    @FXML
+    private ImageView imagenVideo;
+    
+    @FXML 
+    private Pane panelContenedor;
     
     @FXML
     private void agregarVideo(ActionEvent event){
@@ -92,32 +104,70 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void agregarImagen(ActionEvent event){
-        System.out.println("Boton de agregar imagen");
+        
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Select a File (*.PNG)", "*.PNG");
+        fileChooser.getExtensionFilters().add(filter);
+        File file = fileChooser.showOpenDialog(null);
+        if(file != null){
+            String filePath = file.toURI().toString();
+            imagen = new Image(filePath,200,150,false,false);
+            imagenVideo.setLayoutX(0);
+            imagenVideo.setLayoutY(0);
+            imagenVideo.setImage(imagen);
+            imagenVideo.setFitWidth(imagen.getWidth());
+            imagenVideo.setFitHeight(imagen.getHeight());
+        }
     }
     
     @FXML
     private void quitarImagen(ActionEvent event){
-        System.out.println("Boton de quitar imagen");
+        
+        imagenVideo.setImage(null);
+        imagen = null;
     }
     
     @FXML
     private void moverIzquierdaImagen(ActionEvent event){
-        System.out.println("Boton de mover izquierda imagen");
+        
+        if(imagen != null){
+            if(imagenVideo.getLayoutX() != 0){
+                imagenVideo.setLayoutX(imagenVideo.getLayoutX()-5);
+            }
+        }
+      
     }
     
     @FXML
     private void moverArribaImagen(ActionEvent event){
-        System.out.println("Boton de mover arriba imagen");
+
+        if(imagen != null){
+            if(imagenVideo.getLayoutY() != 0){
+                imagenVideo.setLayoutY(imagenVideo.getLayoutY()-5);
+            }
+        }
+        
     }
     
     @FXML
     private void moverAbajoImagen(ActionEvent event){
-        System.out.println("Boton de moverAbajo imagen");
+
+        if(imagen != null){
+            if(imagenVideo.getLayoutY()+imagenVideo.getFitHeight() != 280){
+                imagenVideo.setLayoutY(imagenVideo.getLayoutY()+5);
+            }
+        }
+      
     }
     
     @FXML
     private void moverDerechaImagen(ActionEvent event){
-        System.out.println("Boton de mover derecha imagen");
+
+        if(imagen != null){
+            if(imagenVideo.getLayoutX()+imagenVideo.getFitWidth() != 500){
+                imagenVideo.setLayoutX(imagenVideo.getLayoutX()+5);
+            }
+        }  
     }
     
     @FXML
