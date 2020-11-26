@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -32,9 +34,14 @@ import proyectoeditorvideo.Video;
 public class FXMLDocumentController implements Initializable {
     
     Video vids;
+    
     MediaPlayer mediaPlayer;
+    
     Image imagen;
     
+    private int width;
+    
+    private int height;
     @FXML
     private MediaView mediaView;
     
@@ -65,8 +72,12 @@ public class FXMLDocumentController implements Initializable {
         
         if(sUriVideo != null){
             Media media = new Media(sUriVideo);
+            
             mediaPlayer = new MediaPlayer(media);
             mediaView.setMediaPlayer(mediaPlayer);
+            
+            System.out.println(mediaView.getFitWidth());
+            System.out.println(mediaView.getFitHeight());
             mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>(){
                 @Override
                 public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
@@ -173,9 +184,8 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void moverAbajoImagen(ActionEvent event){
-
         if(imagen != null){
-            if(imagenVideo.getLayoutY()+imagenVideo.getFitHeight() != 280){
+            if(imagenVideo.getLayoutY()+imagenVideo.getFitHeight() <= 280){
                 imagenVideo.setLayoutY(imagenVideo.getLayoutY()+5);
             }
         }
@@ -183,10 +193,9 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
-    private void moverDerechaImagen(ActionEvent event){
-
+    private void moverDerechaImagen(ActionEvent event){   
         if(imagen != null){
-            if(imagenVideo.getLayoutX()+imagenVideo.getFitWidth() != 500){
+            if(imagenVideo.getLayoutX()+imagenVideo.getFitWidth() <= 500 ){
                 imagenVideo.setLayoutX(imagenVideo.getLayoutX()+5);
             }
         }  
@@ -229,6 +238,14 @@ public class FXMLDocumentController implements Initializable {
         {
             VideoThumbnailsExample.agregarImagen(nuevo, "result.mp4", "imageAux.png");
             VideoThumbnailsExample.agregarMusica("result.mp4", "resultAudio.mp4", nuevoAudio);
+            try {
+        	File inputFile = new File("result.mp4");
+                File tempFile = new File("resultAudio.mp4");
+		Files.move(tempFile.toPath(), inputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         }
         System.out.println("ACABE");
     }
