@@ -200,6 +200,9 @@ public class FXMLDocumentController implements Initializable {
         File file = fileChooser.showOpenDialog(null);
         if(file != null){
             sUriAudio = file.toURI().toString();
+            mediaPlayer.stop();
+            mediaPlayer.dispose();
+            
         }
     }
     
